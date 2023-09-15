@@ -15,13 +15,16 @@ export class PhotoService {
   constructor() { }
 
   public async addNewToGallery() {
+    // Take a photo
     const capturedPhoto = await Camera.getPhoto({
-      resultType: CameraResultType.Uri,
-      source: CameraSource.Camera,
-      quality: 100
+    resultType: CameraResultType.Uri, // file-based data; provides best performance
+    source: CameraSource.Camera, // automatically take a new photo with the camera
+    quality: 100 // highest quality (0 to 100)
     });
-    this.photos.unshift({ filepath: "soon...", webviewPath: capturedPhoto.webPath! });
-  }
+    // Save the picture and add it to photo collection
+    const savedImageFile = await this.savePicture(capturedPhoto);
+    this.photos.unshift(savedImageFile);
+   } 
 
   private async savePicture(photo: Photo) {
     const base64Data = await this.readAsBase64(photo); // Write the file to the data directory
